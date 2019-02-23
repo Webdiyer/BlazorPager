@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.RenderTree;
 
@@ -22,7 +21,7 @@ namespace Webdiyer.AspNetCore
         private string PageNumberFormatString { get; set; }
 
         [Parameter]
-        private string RoutePattern { get; set; }
+        private string RoutePattern { get; set; } = "{0}";
 
         [Parameter]
         private int NumericPagerItemCount { get; set; } = 10;
@@ -58,16 +57,16 @@ namespace Webdiyer.AspNetCore
         private bool ShowPrevNext { get; set; } = true;
 
         [Parameter]
-        private string FirstPageText { get; set; } = "首页";
+        private string FirstPageText { get; set; } = "First";
 
         [Parameter]
-        private string NextPageText { get; set; } = "下页";
+        private string NextPageText { get; set; } = "Next";
 
         [Parameter]
-        private string PrevPageText { get; set; } = "上页";
+        private string PrevPageText { get; set; } = "Prev";
 
         [Parameter]
-        private string LastPageText { get; set; } = "尾页";
+        private string LastPageText { get; set; } = "Last";
 
 
         void ChangePage(int pageIndex)
@@ -94,11 +93,11 @@ namespace Webdiyer.AspNetCore
         }
         public int CurrentPageIndex { get; private set; } = 1;
 
+        public int TotalPageCount { get; set; }
+
         private int startPageIndex { get; set; }
 
         private int endPageIndex { get; set; }
-
-        public int TotalPageCount { get; set; }
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {

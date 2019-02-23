@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using X.PagedList;
 
 namespace Demo.App.Services
 {
@@ -11,15 +12,17 @@ namespace Demo.App.Services
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        public Task<WeatherForecast[]> GetForecastAsync(DateTime startDate)
+        public Task<IPagedList<WeatherForecast>> GetForecastAsync(DateTime startDate,int pageIndex,int pageSize)
         {
             var rng = new Random();
-            return Task.FromResult(Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            var data=Enumerable.Range(1, 58).Select(index => new WeatherForecast
             {
                 Date = startDate.AddDays(index),
                 TemperatureC = rng.Next(-20, 55),
                 Summary = Summaries[rng.Next(Summaries.Length)]
-            }).ToArray());
+            }).ToArray();
+
+            return data.ToPagedListAsync(pageIndex, pageSize);
         }
     }
 }

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Server", "Demo\Demo.Se
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.App", "Demo\Demo.App\Demo.App.csproj", "{E294FABD-74FD-4452-A73C-2050E7100969}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorPager", "BlazorPager\BlazorPager.csproj", "{97B2CCFC-A7AE-42EF-BCA9-4DF71E8CC92C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorPager", "BlazorPager\BlazorPager.csproj", "{97B2CCFC-A7AE-42EF-BCA9-4DF71E8CC92C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Webdiyer.AspNetCore.BlazorPager</AssemblyName>
+    <RootNamespace>Webdiyer.AspNetCore</RootNamespace>
+    <Authors>Webdiyer</Authors>
+    <Company />
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <Description>Pagination component for Asp.net core Blazor.</Description>
+    <PackageProjectUrl>http://www.webdiyer.com</PackageProjectUrl>
+    <PackageTags>BlazorPager;Pagination;paging</PackageTags>
+    <Version>0.1.0.0</Version>
+    <Copyright>Copyright © 2019 Webdiyer</Copyright>
+    <PackageReleaseNotes>Initial release, support Blazor 0.8;</PackageReleaseNotes>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Browser" Version="3.0.0-preview-19075-0444" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Build" Version="3.0.0-preview-19075-0444" />
+  </ItemGroup>
+
+</Project>

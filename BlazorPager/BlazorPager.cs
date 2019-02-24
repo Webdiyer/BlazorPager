@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.RenderTree;
 
@@ -8,17 +11,19 @@ namespace Webdiyer.AspNetCore
     public class BlazorPager : ComponentBase
     {
         [Parameter]
-        private string TagName { get; set; } = "div";
-
+        private string ContainerTagName { get; set; } = "div";
+        
         [Parameter]
         public int PageSize { get; private set; } = 10;
 
         [Parameter]
         public int TotalItemCount { get; private set; }
-
-
+        
         [Parameter]
         private string PageNumberFormatString { get; set; }
+
+        [Parameter]
+        private string CurrentPageNumberFormatString { get; set; }
 
         [Parameter]
         private string RoutePattern { get; set; } = "{0}";
@@ -28,10 +33,7 @@ namespace Webdiyer.AspNetCore
 
         [Parameter]
         private Action<int> OnPageChanged { get; set; }
-
-        [Parameter]
-        private string CssClass { get; set; }
-
+        
         [Parameter]
         private string NumericPagerItemCssClass { get; set; }
 
@@ -57,16 +59,35 @@ namespace Webdiyer.AspNetCore
         private bool ShowPrevNext { get; set; } = true;
 
         [Parameter]
-        private string FirstPageText { get; set; } = "First";
+        private string FirstPageText { get; set; } = "<<";
 
         [Parameter]
-        private string NextPageText { get; set; } = "Next";
+        private string PrevPageText { get; set; } = "<";
 
         [Parameter]
-        private string PrevPageText { get; set; } = "Prev";
+        private string NextPageText { get; set; } = ">";
 
         [Parameter]
-        private string LastPageText { get; set; } = "Last";
+        private string LastPageText { get; set; } = ">>";
+
+        //[Parameter]
+        //private string NumericPagerItemTemplate { get; set; }
+
+
+        //[Parameter]
+        //private string CurrentPagerItemTemplate { get; set; }
+
+
+        //[Parameter]
+        //private string NavigationPagerItemTemplate { get; set; }
+
+
+        //[Parameter]
+        //private string MorePagerItemTemplate { get; set; }
+
+
+        //[Parameter]
+        //private string DisabledPagerItemTemplate { get; set; }
 
 
         void ChangePage(int pageIndex)
@@ -74,6 +95,25 @@ namespace Webdiyer.AspNetCore
             CurrentPageIndex = pageIndex;
             OnPageChanged?.Invoke(pageIndex);
             StateHasChanged();
+        }
+
+        IDictionary<string, object> customAttributes=new Dictionary<string,object>();
+
+        public override Task SetParametersAsync(ParameterCollection parameters)
+        {
+            var props = this.GetType().GetProperties(BindingFlags.NonPublic|BindingFlags.Instance|BindingFlags.Public).Where(p => p.GetCustomAttributes(false).Any(a => a is ParameterAttribute)).Select(p=>p.Name).ToArray();
+            var prms=(IDictionary<string, object>)parameters.ToDictionary();
+
+            //remove custom attributes from parameter collection and add to customAttributes variable for rendering in BuildRenderTree method
+            foreach (var prm in prms)
+            {
+                if (!props.Contains(prm.Key))
+                {
+                    prms.Remove(prm);
+                    customAttributes.Add(prm);
+                }
+            }
+            return base.SetParametersAsync(ParameterCollection.FromDictionary(prms));
         }
 
         protected override void OnParametersSet()
@@ -105,10 +145,13 @@ namespace Webdiyer.AspNetCore
             if (!AutoHide || TotalItemCount > PageSize)
             {
                 var seq = 0;
-                builder.OpenElement(seq, TagName);
-                if (!string.IsNullOrWhiteSpace(CssClass))
+                builder.OpenElement(seq, ContainerTagName);
+                if (customAttributes != null)
                 {
-                    builder.AddAttribute(++seq, "class", CssClass);
+                    foreach(var attr in customAttributes)
+                    {
+                        builder.AddAttribute(++seq, attr.Key, attr.Value);
+                    }
                 }
                 var navAttr = new Dictionary<string, object> { { "class", NavigationPagerItemCssClass }};
                 //first page
@@ -126,12 +169,13 @@ namespace Webdiyer.AspNetCore
                 {
                     createPagerItem(builder, ref seq, startPageIndex-1, MorePageText, navAttr);
                 }
+                var npAttr = string.IsNullOrWhiteSpace(NumericPagerItemCssClass) ? null : new Dictionary<string, object> { { "class", NumericPagerItemCssClass } };
                 if (ShowNumericPagerItems)
                 {
                     for (int i = startPageIndex; i <= endPageIndex; i++)
                     {
                         var pageIndex = i;
-                        createPagerItem(builder,ref seq, pageIndex,i.ToString(), new Dictionary<string, object> { { "class", NumericPagerItemCssClass } });                        
+                        createPagerItem(builder,ref seq, pageIndex,i.ToString(),npAttr,true);                        
                     }
                 }
                 //more page
@@ -153,19 +197,27 @@ namespace Webdiyer.AspNetCore
             }
         }
 
-        private void createPagerItem(RenderTreeBuilder builder,ref int seq,int pageIndex,string text,Dictionary<string,object> attributes)
+        private void createPagerItem(RenderTreeBuilder builder,ref int seq,int pageIndex,string text,Dictionary<string,object> attributes=null, bool isNumericPage = false)
         {
             builder.OpenElement(++seq, "a");
-            foreach(var de in attributes)
+            if (attributes != null)
             {
-                builder.AddAttribute(++seq, de.Key, de.Value);
+                foreach (var de in attributes)
+                {
+                    builder.AddAttribute(++seq, de.Key, de.Value);
+                }
             }
             if (pageIndex > 0)
             {
                 builder.AddAttribute(++seq, "href", string.Format(RoutePattern, pageIndex));
                 builder.AddAttribute(++seq, "onclick", BindMethods.GetEventHandlerValue<UIMouseEventArgs>(() => ChangePage(pageIndex)));
             }
-            builder.AddContent(++seq, string.Format((PageNumberFormatString ?? "{0}"), text));
+            var numberFormat = string.IsNullOrWhiteSpace(PageNumberFormatString)?"{0}":PageNumberFormatString;
+            if (pageIndex == CurrentPageIndex&&!string.IsNullOrWhiteSpace(CurrentPageNumberFormatString))
+            {
+                numberFormat = CurrentPageNumberFormatString;
+            }
+            builder.AddContent(++seq, isNumericPage?string.Format(numberFormat,text):text);
             builder.CloseElement();
         }
 

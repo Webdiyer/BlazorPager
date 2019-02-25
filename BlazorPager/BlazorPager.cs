@@ -5,11 +5,17 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.RenderTree;
+using Microsoft.AspNetCore.Components.Services;
 
 namespace Webdiyer.AspNetCore
 {
     public class BlazorPager : ComponentBase
     {
+        #region properties
+
+        [Inject]
+        protected IUriHelper uriHelper { get; set; }
+
         [Parameter]
         private string ContainerTagName { get; set; } = "div";
         
@@ -70,6 +76,9 @@ namespace Webdiyer.AspNetCore
         [Parameter]
         private string LastPageText { get; set; } = ">>";
 
+        [Parameter]
+        public int CurrentPageIndex { get; private set; } = 1;
+
         //[Parameter]
         //private string NumericPagerItemTemplate { get; set; }
 
@@ -89,6 +98,7 @@ namespace Webdiyer.AspNetCore
         //[Parameter]
         //private string DisabledPagerItemTemplate { get; set; }
 
+        #endregion
 
         void ChangePage(int pageIndex)
         {
@@ -131,7 +141,6 @@ namespace Webdiyer.AspNetCore
             endPageIndex = _endPageIndex;
             base.OnParametersSet();
         }
-        public int CurrentPageIndex { get; private set; } = 1;
 
         public int TotalPageCount { get; set; }
 
@@ -195,6 +204,12 @@ namespace Webdiyer.AspNetCore
                 }
                 builder.CloseElement();
             }
+        }
+
+        public void GoToPage(int pageIndex)
+        {
+            uriHelper.NavigateTo(string.Format(RoutePattern, pageIndex));
+            ChangePage(pageIndex);
         }
 
         private void createPagerItem(RenderTreeBuilder builder,ref int seq,int pageIndex,string text,Dictionary<string,object> attributes=null, bool isNumericPage = false)

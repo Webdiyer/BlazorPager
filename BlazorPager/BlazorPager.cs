@@ -17,7 +17,7 @@ namespace Webdiyer.AspNetCore
         protected IUriHelper uriHelper { get; set; }
 
         [Parameter]
-        private string ContainerTagName { get; set; } = "div";
+        private string TagName { get; set; } = "div";
         
         [Parameter]
         public int PageSize { get; private set; } = 10;
@@ -26,10 +26,10 @@ namespace Webdiyer.AspNetCore
         public int TotalItemCount { get; private set; }
         
         [Parameter]
-        private string PageNumberFormatString { get; set; }
+        private string NumericPagerItemTextFormatString { get; set; }
 
         [Parameter]
-        private string CurrentPageNumberFormatString { get; set; }
+        private string CurrentPagerItemTextFormatString { get; set; }
 
         [Parameter]
         private string RoutePattern { get; set; } = "{0}";
@@ -39,12 +39,24 @@ namespace Webdiyer.AspNetCore
 
         [Parameter]
         private Action<int> OnPageChanged { get; set; }
-        
+
+        [Parameter]
+        private string PagerItemCssClass { get; set; }
+
+        [Parameter]
+        private string MorePagerItemCssClass { get; set; }
+
         [Parameter]
         private string NumericPagerItemCssClass { get; set; }
 
         [Parameter]
         private string NavigationPagerItemCssClass { get; set; }
+
+        [Parameter]
+        private string CurrentPagerItemCssClass { get; set; }
+
+        [Parameter]
+        private string DisabledPagerItemCssClass { get; set; }
 
         [Parameter]
         private bool AutoHide { get; set; } = true;
@@ -79,25 +91,43 @@ namespace Webdiyer.AspNetCore
         [Parameter]
         public int CurrentPageIndex { get; private set; } = 1;
 
-        //[Parameter]
-        //private string NumericPagerItemTemplate { get; set; }
+        [Parameter]
+        private string PagerItemContainerTagName { get; set; }
+
+        [Parameter]
+        private string PagerItemContainerCssClass { get; set; }
+
+        [Parameter]
+        private string NumericPagerItemContainerTagName { get; set; }
+
+        [Parameter]
+        private string NumericPagerItemContainerCssClass { get; set; }
 
 
-        //[Parameter]
-        //private string CurrentPagerItemTemplate { get; set; }
+        [Parameter]
+        private string CurrentPagerItemContainerTagName { get; set; }
+
+        [Parameter]
+        private string CurrentPagerItemContainerCssClass { get; set; }
 
 
-        //[Parameter]
-        //private string NavigationPagerItemTemplate { get; set; }
+        [Parameter]
+        private string NavigationPagerItemContainerTagName { get; set; }
 
+        [Parameter]
+        private string NavigationPagerItemContainerCssClass { get; set; }
 
-        //[Parameter]
-        //private string MorePagerItemTemplate { get; set; }
+        [Parameter]
+        private string MorePagerItemContainerTagName { get; set; }
 
+        [Parameter]
+        private string MorePagerItemContainerCssClass { get; set; }
 
-        //[Parameter]
-        //private string DisabledPagerItemTemplate { get; set; }
+        [Parameter]
+        private string DisabledPagerItemContainerTagName { get; set; }
 
+        [Parameter]
+        private string DisabledPagerItemContainerCssClass { get; set; }
         #endregion
 
         void ChangePage(int pageIndex)
@@ -154,7 +184,7 @@ namespace Webdiyer.AspNetCore
             if (!AutoHide || TotalItemCount > PageSize)
             {
                 var seq = 0;
-                builder.OpenElement(seq, ContainerTagName);
+                builder.OpenElement(seq, TagName);
                 if (customAttributes != null)
                 {
                     foreach(var attr in customAttributes)
@@ -162,45 +192,43 @@ namespace Webdiyer.AspNetCore
                         builder.AddAttribute(++seq, attr.Key, attr.Value);
                     }
                 }
-                var navAttr = new Dictionary<string, object> { { "class", NavigationPagerItemCssClass }};
                 //first page
                 if (ShowFirstLast)
                 {
-                    createPagerItem(builder, ref seq, CurrentPageIndex>1?1:0,FirstPageText,navAttr);
+                    createPagerItem(builder, ref seq, CurrentPageIndex>1?1:0,FirstPageText,CurrentPageIndex==1?PagerItemType.Disabled: PagerItemType.Navigation);
                 }
                 //prev page
                 if (ShowPrevNext)
                 {
-                    createPagerItem(builder,ref seq,CurrentPageIndex-1,PrevPageText, navAttr);
+                    createPagerItem(builder,ref seq,CurrentPageIndex-1,PrevPageText, CurrentPageIndex == 1 ? PagerItemType.Disabled : PagerItemType.Navigation);
                 }
                 //more page
                 if (ShowMorePagerItems && startPageIndex>1)
                 {
-                    createPagerItem(builder, ref seq, startPageIndex-1, MorePageText, navAttr);
+                    createPagerItem(builder, ref seq, startPageIndex-1, MorePageText, PagerItemType.More);
                 }
-                var npAttr = string.IsNullOrWhiteSpace(NumericPagerItemCssClass) ? null : new Dictionary<string, object> { { "class", NumericPagerItemCssClass } };
                 if (ShowNumericPagerItems)
                 {
                     for (int i = startPageIndex; i <= endPageIndex; i++)
                     {
                         var pageIndex = i;
-                        createPagerItem(builder,ref seq, pageIndex,i.ToString(),npAttr,true);                        
+                        createPagerItem(builder,ref seq, pageIndex,i.ToString(),CurrentPageIndex==i?PagerItemType.Current:PagerItemType.Number);                        
                     }
                 }
                 //more page
                 if (ShowMorePagerItems && endPageIndex < TotalPageCount)
                 {
-                    createPagerItem(builder, ref seq, endPageIndex + 1, MorePageText, navAttr);
+                    createPagerItem(builder, ref seq, endPageIndex + 1, MorePageText, PagerItemType.More);
                 }
                 //next page
                 if (ShowPrevNext)
                 {
-                    createPagerItem(builder, ref seq, CurrentPageIndex<TotalPageCount?CurrentPageIndex + 1:0,NextPageText, navAttr);
+                    createPagerItem(builder, ref seq, CurrentPageIndex<TotalPageCount?CurrentPageIndex + 1:0,NextPageText, CurrentPageIndex<TotalPageCount? PagerItemType.Navigation:PagerItemType.Disabled);
                 }
                 //last page
                 if (ShowFirstLast)
                 {
-                    createPagerItem(builder, ref seq, CurrentPageIndex<TotalPageCount ? TotalPageCount : 0,LastPageText, navAttr);
+                    createPagerItem(builder, ref seq, CurrentPageIndex<TotalPageCount ? TotalPageCount : 0,LastPageText, CurrentPageIndex<TotalPageCount ? PagerItemType.Navigation: PagerItemType.Disabled );
                 }
                 builder.CloseElement();
             }
@@ -212,29 +240,93 @@ namespace Webdiyer.AspNetCore
             ChangePage(pageIndex);
         }
 
-        private void createPagerItem(RenderTreeBuilder builder,ref int seq,int pageIndex,string text,Dictionary<string,object> attributes=null, bool isNumericPage = false)
+        private void createPagerItem(RenderTreeBuilder builder, ref int seq, int pageIndex, string text, PagerItemType itemType)
         {
-            builder.OpenElement(++seq, "a");
-            if (attributes != null)
+            var containerTag = PagerItemContainerTagName;
+            var containerClass = PagerItemContainerCssClass;
+            var itemClass = PagerItemCssClass;
+            switch (itemType)
             {
-                foreach (var de in attributes)
-                {
-                    builder.AddAttribute(++seq, de.Key, de.Value);
-                }
+                case PagerItemType.Number:
+                    containerTag = GetFirstNonNullString(new[] { NumericPagerItemContainerTagName, containerTag });
+                    containerClass = GetFirstNonNullString(new[] { NumericPagerItemContainerCssClass, containerClass });
+                    itemClass = GetFirstNonNullString(new[] { NumericPagerItemCssClass, itemClass });
+                    break;
+                case PagerItemType.Navigation:
+                    containerTag = GetFirstNonNullString(new[] { NavigationPagerItemContainerTagName, containerTag });
+                    containerClass = GetFirstNonNullString(new[] { NavigationPagerItemContainerCssClass, containerClass });
+                    itemClass = GetFirstNonNullString(new[] { NavigationPagerItemCssClass,itemClass });
+                    break;
+                case PagerItemType.Current:
+                    containerTag = GetFirstNonNullString(new[] { CurrentPagerItemContainerTagName, NumericPagerItemContainerTagName, containerTag });
+                    containerClass = GetFirstNonNullString(new[] { CurrentPagerItemContainerCssClass, NumericPagerItemContainerCssClass, containerClass });
+                    itemClass = GetFirstNonNullString(new[] { CurrentPagerItemCssClass, NumericPagerItemCssClass, itemClass });
+                    break;
+                case PagerItemType.More:
+                    containerTag = GetFirstNonNullString(new[] { MorePagerItemContainerTagName, containerTag });
+                    containerClass = GetFirstNonNullString(new[] { MorePagerItemContainerCssClass, containerClass });
+                    itemClass = GetFirstNonNullString(new[] { MorePagerItemCssClass, itemClass });
+                    break;
+                case PagerItemType.Disabled:
+                    containerTag = GetFirstNonNullString(new[] { DisabledPagerItemContainerTagName,NavigationPagerItemContainerTagName, containerTag });
+                    containerClass = GetFirstNonNullString(new[] { DisabledPagerItemContainerCssClass,NavigationPagerItemContainerCssClass, containerClass });
+                    itemClass = GetFirstNonNullString(new[] { DisabledPagerItemCssClass, NavigationPagerItemCssClass, itemClass });
+                    break;
             }
+            bool hasContainerTag = !string.IsNullOrWhiteSpace(containerTag);
+            if (hasContainerTag)
+            {
+                builder.OpenElement(++seq, containerTag);
+                builder.AddAttribute(++seq, "class", containerClass);
+            }
+            builder.OpenElement(++seq, "a");
+            //if (attributes != null)
+            //{
+            //    foreach (var de in attributes)
+            //    {
+            //        builder.AddAttribute(++seq, de.Key, de.Value);
+            //    }
+            //}
+            builder.AddAttribute(++seq, "class", itemClass);
             if (pageIndex > 0)
             {
                 builder.AddAttribute(++seq, "href", string.Format(RoutePattern, pageIndex));
                 builder.AddAttribute(++seq, "onclick", BindMethods.GetEventHandlerValue<UIMouseEventArgs>(() => ChangePage(pageIndex)));
             }
-            var numberFormat = string.IsNullOrWhiteSpace(PageNumberFormatString)?"{0}":PageNumberFormatString;
-            if (pageIndex == CurrentPageIndex&&!string.IsNullOrWhiteSpace(CurrentPageNumberFormatString))
+            var pagerItemText = text;
+            if (itemType == PagerItemType.Number || itemType == PagerItemType.Current)
             {
-                numberFormat = CurrentPageNumberFormatString;
+                var numberFormat = string.IsNullOrWhiteSpace(NumericPagerItemTextFormatString) ? "{0}" : NumericPagerItemTextFormatString;
+                if (itemType == PagerItemType.Current && !string.IsNullOrWhiteSpace((CurrentPagerItemTextFormatString)))
+                {
+                    numberFormat = CurrentPagerItemTextFormatString;
+                }
+                pagerItemText = string.Format(numberFormat, text);
             }
-            builder.AddContent(++seq, isNumericPage?string.Format(numberFormat,text):text);
+            builder.AddContent(++seq,pagerItemText);
             builder.CloseElement();
+            if (hasContainerTag)
+            {
+                builder.CloseElement();
+            }
         }
 
+        private string GetFirstNonNullString(string[] values)
+        {
+            for(var i = 0; i < values.Length; i++)
+            {
+                if (values[i]!=null)
+                    return values[i];
+            }
+            return string.Empty;
+        }
+    }
+    internal enum PagerItemType : byte
+    {
+        Navigation,
+        More,
+        Number,
+        Current,
+        Disabled
     }
 }

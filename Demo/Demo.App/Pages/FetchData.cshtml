@@ -38,7 +38,13 @@ else
             }
         </tbody>
     </table>
-    <BlazorPager ref="blazorPager" CurrentPageIndex="@Page" CurrentPageNumberFormatString="[{0}]" TotalItemCount="@TotalItemCount" OnPageChanged="((p)=>ChangePage(p))" PageSize="@PageSize" NumericPagerItemCssClass="btn btn-primary" NavigationPagerItemCssClass="btn btn-info" RoutePattern="fetchdata/{0}"></BlazorPager>
+    <BlazorPager ref="blazorPager" CurrentPageIndex="@Page" 
+                 CurrentPageNumberFormatString="[{0}]" 
+                 TotalItemCount="@TotalItemCount" 
+                 OnPageChanged="((p)=>ChangePage(p))" PageSize="@PageSize" 
+                 NumericPagerItemCssClass="btn btn-primary" 
+                 NavigationPagerItemCssClass="btn btn-info" 
+                 RoutePattern="fetchdata/{0}"></BlazorPager>
     <div>Page @Page of @TotalPageCount</div>
 }
 

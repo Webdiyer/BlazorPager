@@ -6,7 +6,11 @@
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
-<BlazorPager TotalItemCount="188" style="font-size:8px" OnPageChanged="@((p)=>ChangePage(p))" PageSize="9" NumericPagerItemCssClass="btn btn-primary" NavigationPagerItemCssClass="btn btn-info" RoutePattern="index/{0}"></BlazorPager>
+<BlazorPager TotalItemCount="188" style="font-size:8px" 
+             OnPageChanged="@((p)=>ChangePage(p))" PageSize="9" 
+             NumericPagerItemCssClass="btn btn-primary" 
+             NavigationPagerItemCssClass="btn btn-info" 
+             RoutePattern="index/{0}"></BlazorPager>
 
 @functions{
     [Parameter]

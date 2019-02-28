@@ -23,7 +23,7 @@ namespace Webdiyer.AspNetCore
         public int PageSize { get; private set; } = 10;
 
         [Parameter]
-        public int TotalItemCount { get; private set; }
+        private int TotalItemCount { get; set; }
         
         [Parameter]
         private string NumericPagerItemTextFormatString { get; set; }
@@ -150,7 +150,10 @@ namespace Webdiyer.AspNetCore
                 if (!props.Contains(prm.Key))
                 {
                     prms.Remove(prm);
-                    customAttributes.Add(prm);
+                    if (!customAttributes.ContainsKey(prm.Key))
+                    {
+                        customAttributes.Add(prm);
+                    }
                 }
             }
             return base.SetParametersAsync(ParameterCollection.FromDictionary(prms));
@@ -280,13 +283,6 @@ namespace Webdiyer.AspNetCore
                 builder.AddAttribute(++seq, "class", containerClass);
             }
             builder.OpenElement(++seq, "a");
-            //if (attributes != null)
-            //{
-            //    foreach (var de in attributes)
-            //    {
-            //        builder.AddAttribute(++seq, de.Key, de.Value);
-            //    }
-            //}
             builder.AddAttribute(++seq, "class", itemClass);
             if (pageIndex > 0)
             {
@@ -303,7 +299,7 @@ namespace Webdiyer.AspNetCore
                 }
                 pagerItemText = string.Format(numberFormat, text);
             }
-            builder.AddContent(++seq,pagerItemText);
+            builder.AddMarkupContent(++seq,pagerItemText);
             builder.CloseElement();
             if (hasContainerTag)
             {

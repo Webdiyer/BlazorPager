@@ -9,132 +9,16 @@ using Microsoft.AspNetCore.Components.Services;
 
 namespace Webdiyer.AspNetCore
 {
-    public class BlazorPager : ComponentBase
+    public partial class BlazorPager : ComponentBase
     {
-        #region properties
-
-        [Inject]
-        protected IUriHelper uriHelper { get; set; }
-
-        [Parameter]
-        private string TagName { get; set; } = "div";
-        
-        [Parameter]
-        public int PageSize { get; private set; } = 10;
-
-        [Parameter]
-        private int TotalItemCount { get; set; }
-        
-        [Parameter]
-        private string NumericPagerItemTextFormatString { get; set; }
-
-        [Parameter]
-        private string CurrentPagerItemTextFormatString { get; set; }
-
-        [Parameter]
-        private string RoutePattern { get; set; } = "{0}";
-
-        [Parameter]
-        private int NumericPagerItemCount { get; set; } = 10;
-
-        [Parameter]
-        private Action<int> OnPageChanged { get; set; }
-
-        [Parameter]
-        private string PagerItemCssClass { get; set; }
-
-        [Parameter]
-        private string MorePagerItemCssClass { get; set; }
-
-        [Parameter]
-        private string NumericPagerItemCssClass { get; set; }
-
-        [Parameter]
-        private string NavigationPagerItemCssClass { get; set; }
-
-        [Parameter]
-        private string CurrentPagerItemCssClass { get; set; }
-
-        [Parameter]
-        private string DisabledPagerItemCssClass { get; set; }
-
-        [Parameter]
-        private bool AutoHide { get; set; } = true;
-
-        [Parameter]
-        private string MorePageText { get; set; } = "...";
-
-        [Parameter]
-        private bool ShowNumericPagerItems { get; set; } = true;
-
-        [Parameter]
-        private bool ShowMorePagerItems { get; set; } = true;
-        
-        [Parameter]
-        private bool ShowFirstLast { get; set; } = true;
-
-        [Parameter]
-        private bool ShowPrevNext { get; set; } = true;
-
-        [Parameter]
-        private string FirstPageText { get; set; } = "<<";
-
-        [Parameter]
-        private string PrevPageText { get; set; } = "<";
-
-        [Parameter]
-        private string NextPageText { get; set; } = ">";
-
-        [Parameter]
-        private string LastPageText { get; set; } = ">>";
-
-        [Parameter]
-        public int CurrentPageIndex { get; private set; } = 1;
-
-        [Parameter]
-        private string PagerItemContainerTagName { get; set; }
-
-        [Parameter]
-        private string PagerItemContainerCssClass { get; set; }
-
-        [Parameter]
-        private string NumericPagerItemContainerTagName { get; set; }
-
-        [Parameter]
-        private string NumericPagerItemContainerCssClass { get; set; }
-
-
-        [Parameter]
-        private string CurrentPagerItemContainerTagName { get; set; }
-
-        [Parameter]
-        private string CurrentPagerItemContainerCssClass { get; set; }
-
-
-        [Parameter]
-        private string NavigationPagerItemContainerTagName { get; set; }
-
-        [Parameter]
-        private string NavigationPagerItemContainerCssClass { get; set; }
-
-        [Parameter]
-        private string MorePagerItemContainerTagName { get; set; }
-
-        [Parameter]
-        private string MorePagerItemContainerCssClass { get; set; }
-
-        [Parameter]
-        private string DisabledPagerItemContainerTagName { get; set; }
-
-        [Parameter]
-        private string DisabledPagerItemContainerCssClass { get; set; }
-        #endregion
-
         void ChangePage(int pageIndex)
         {
-            CurrentPageIndex = pageIndex;
-            OnPageChanged?.Invoke(pageIndex);
-            StateHasChanged();
+            if (pageIndex > 0&&pageIndex!=CurrentPageIndex)
+            {
+                CurrentPageIndex = pageIndex;
+                OnPageChanged?.Invoke(pageIndex);
+                StateHasChanged();
+            }
         }
 
         IDictionary<string, object> customAttributes=new Dictionary<string,object>();
@@ -175,11 +59,6 @@ namespace Webdiyer.AspNetCore
             base.OnParametersSet();
         }
 
-        public int TotalPageCount { get; set; }
-
-        private int startPageIndex { get; set; }
-
-        private int endPageIndex { get; set; }
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
@@ -239,8 +118,11 @@ namespace Webdiyer.AspNetCore
 
         public void GoToPage(int pageIndex)
         {
-            uriHelper.NavigateTo(string.Format(RoutePattern, pageIndex));
-            ChangePage(pageIndex);
+            if (pageIndex > 0 && pageIndex != CurrentPageIndex)
+            {
+                UriHelper.NavigateTo(string.Format(RoutePattern, pageIndex));
+                ChangePage(pageIndex);
+            }
         }
 
         private void createPagerItem(RenderTreeBuilder builder, ref int seq, int pageIndex, string text, PagerItemType itemType)
@@ -284,7 +166,7 @@ namespace Webdiyer.AspNetCore
             }
             builder.OpenElement(++seq, "a");
             builder.AddAttribute(++seq, "class", itemClass);
-            if (pageIndex > 0)
+            if (pageIndex > 0&&pageIndex!=CurrentPageIndex)
             {
                 builder.AddAttribute(++seq, "href", string.Format(RoutePattern, pageIndex));
                 builder.AddAttribute(++seq, "onclick", BindMethods.GetEventHandlerValue<UIMouseEventArgs>(() => ChangePage(pageIndex)));
@@ -316,13 +198,5 @@ namespace Webdiyer.AspNetCore
             }
             return string.Empty;
         }
-    }
-    internal enum PagerItemType : byte
-    {
-        Navigation,
-        More,
-        Number,
-        Current,
-        Disabled
     }
 }

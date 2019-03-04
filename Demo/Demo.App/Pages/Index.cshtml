@@ -3,15 +3,9 @@
 @using Webdiyer.AspNetCore;
 @addTagHelper *,Webdiyer.AspNetCore.BlazorPager
 
-<h1>Hello, world!</h1>
+<h1>BlazorPager with efault settings:</h1>
 
-Welcome to your new app.
-<BlazorPager TotalItemCount="188" style="font-size:8px" 
-             OnPageChanged="@((p)=>ChangePage(p))" PageSize="9" 
-             NumericPagerItemCssClass="btn btn-primary" 
-             NavigationPagerItemCssClass="btn btn-info" 
-             CurrentPagerItemTextFormatString="[{0}]"
-             RoutePattern="index/{0}"></BlazorPager>
+<BlazorPager TotalItemCount="188" OnPageChanged="@((p)=>ChangePage(p))" RoutePattern="index/{0}"></BlazorPager>
 
 @functions{
     [Parameter]

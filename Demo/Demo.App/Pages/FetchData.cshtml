@@ -38,45 +38,52 @@ else
             }
         </tbody>
     </table>
-    <BlazorPager ref="blazorPager" CurrentPageIndex="@Page" 
-                 CurrentPageNumberFormatString="[{0}]" 
-                 TotalItemCount="@TotalItemCount" 
-                 OnPageChanged="((p)=>ChangePage(p))" PageSize="@PageSize" 
-                 NumericPagerItemCssClass="btn btn-primary" 
-                 NavigationPagerItemCssClass="btn btn-info" 
-                 RoutePattern="fetchdata/{0}"></BlazorPager>
-    <div>Page @Page of @TotalPageCount</div>
-}
+    <nav aria-label="Page navigation">
+        <BlazorPager ref="blazorPager" CurrentPageIndex="@Page"
+                     TotalItemCount="@TotalItemCount"
+                     OnPageChanged="((p)=>ChangePage(p))"
+                     PageSize="@PageSize"
+                      TagName="ul" class="pagination"
+                     PagerItemContainerTagName="li"
+                     PagerItemContainerCssClass="page-item"
+                     CurrentPagerItemContainerCssClass="page-item active"
+                     DisabledPagerItemContainerCssClass="page-item disabled"
+                     CurrentPagerItemTextFormatString="{0}<span class='sr-only'>current</span>"
+                     PagerItemCssClass="page-link"
+                     RoutePattern="fetchdata/{0}"></BlazorPager>
+    </nav>
+        <div>Page @Page of @TotalPageCount</div>
+        }
 
-@functions {
-    IPagedList<WeatherForecast> forecasts;
+        @functions {
+            IPagedList<WeatherForecast> forecasts;
 
-    BlazorPager blazorPager;
+            BlazorPager blazorPager;
 
     [Parameter]
-    int Page { get; set; } = 1;
+        int Page { get; set; } = 1;
 
-    int TotalItemCount { get; set; }
+        int TotalItemCount { get; set; }
 
-    int PageSize { get; set; } = 5;
+        int PageSize { get; set; } = 5;
 
-    int TotalPageCount { get; set; }
+        int TotalPageCount { get; set; }
 
-    protected override async Task OnInitAsync()
-    {
-        forecasts = await ForecastService.GetForecastAsync(DateTime.Now, Page, PageSize);
-        TotalItemCount = forecasts.TotalItemCount;
-    }
+        protected override async Task OnInitAsync()
+        {
+            forecasts = await ForecastService.GetForecastAsync(DateTime.Now, Page, PageSize);
+            TotalItemCount = forecasts.TotalItemCount;
+        }
 
-    async void ChangePage(int pageIndex)
-    {
-        forecasts = await ForecastService.GetForecastAsync(DateTime.Now, pageIndex, PageSize);
-        StateHasChanged();
-    }
+        async void ChangePage(int pageIndex)
+        {
+            forecasts = await ForecastService.GetForecastAsync(DateTime.Now, pageIndex, PageSize);
+            StateHasChanged();
+        }
 
-    protected override void OnAfterRender()
-    {
-        TotalPageCount = blazorPager.TotalPageCount;
-        base.OnAfterRender();
-    }
-}
+        protected override void OnAfterRender()
+        {
+            TotalPageCount = blazorPager.TotalPageCount;
+            base.OnAfterRender();
+        }
+        }

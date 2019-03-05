@@ -74,6 +74,7 @@ namespace Webdiyer.AspNetCore
                         builder.AddAttribute(++seq, attr.Key, attr.Value);
                     }
                 }
+                RenderAfterBeginTag?.Invoke(builder);
                 //first page
                 if (ShowFirstLast)
                 {
@@ -112,6 +113,7 @@ namespace Webdiyer.AspNetCore
                 {
                     createPagerItem(builder, ref seq, CurrentPageIndex<TotalPageCount ? TotalPageCount : 0,LastPageText, CurrentPageIndex<TotalPageCount ? PagerItemType.Navigation: PagerItemType.Disabled );
                 }
+                RenderBeforeEndTag?.Invoke(builder);
                 builder.CloseElement();
             }
         }

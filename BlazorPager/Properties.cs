@@ -122,6 +122,12 @@ namespace Webdiyer.AspNetCore
         [Parameter]
         private string DisabledPagerItemContainerCssClass { get; set; }
 
+        [Parameter]
+        private RenderFragment RenderAfterBeginTag { get; set; }
+
+        [Parameter]
+        private RenderFragment RenderBeforeEndTag { get; set; }
+
 
         public int TotalPageCount { get; set; }
 

@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Demo.App\Demo.App.csproj" />
+    <ProjectReference Include="..\RazorComponentsDemo.App\RazorComponentsDemo.App.csproj" />
   </ItemGroup>
 
 </Project>

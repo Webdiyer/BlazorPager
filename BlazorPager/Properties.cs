@@ -16,6 +16,9 @@ namespace Webdiyer.AspNetCore
         public int PageSize { get; private set; } = 10;
 
         [Parameter]
+        private int InitPageIndex { get; set; } = 1;
+
+        [Parameter]
         private int TotalItemCount { get; set; }
 
         [Parameter]
@@ -80,10 +83,7 @@ namespace Webdiyer.AspNetCore
 
         [Parameter]
         private string LastPageText { get; set; } = ">>";
-
-        [Parameter]
-        public int CurrentPageIndex { get; private set; } = 1;
-
+        
         [Parameter]
         private string PagerItemContainerTagName { get; set; }
 
@@ -128,8 +128,9 @@ namespace Webdiyer.AspNetCore
         [Parameter]
         private RenderFragment RenderBeforeEndTag { get; set; }
 
+        public int CurrentPageIndex { get; private set; } = 1;
 
-        public int TotalPageCount { get; set; }
+        public int TotalPageCount { get; private set; }
 
         private int startPageIndex { get; set; }
 

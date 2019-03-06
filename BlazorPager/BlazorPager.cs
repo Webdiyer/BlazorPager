@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.RenderTree;
-using Microsoft.AspNetCore.Components.Services;
 
 namespace Webdiyer.AspNetCore
 {
@@ -13,7 +12,7 @@ namespace Webdiyer.AspNetCore
     {
         void ChangePage(int pageIndex)
         {
-            if (pageIndex > 0&&pageIndex!=CurrentPageIndex)
+            if (pageIndex > 0)
             {
                 CurrentPageIndex = pageIndex;
                 OnPageChanged?.Invoke(pageIndex);
@@ -26,21 +25,33 @@ namespace Webdiyer.AspNetCore
         public override Task SetParametersAsync(ParameterCollection parameters)
         {
             var props = this.GetType().GetProperties(BindingFlags.NonPublic|BindingFlags.Instance|BindingFlags.Public).Where(p => p.GetCustomAttributes(false).Any(a => a is ParameterAttribute)).Select(p=>p.Name).ToArray();
-            var prms=(IDictionary<string, object>)parameters.ToDictionary();
-
+            var allPrms=(IDictionary<string, object>)parameters.ToDictionary();
+            var validPrms = new Dictionary<string,object>();
             //remove custom attributes from parameter collection and add to customAttributes variable for rendering in BuildRenderTree method
-            foreach (var prm in prms)
+
+            foreach (var prm in allPrms)
             {
-                if (!props.Contains(prm.Key))
+                if (props.Contains(prm.Key))
                 {
-                    prms.Remove(prm);
+                    validPrms.Add(prm.Key, prm.Value);
+                }
+                else
+                {
                     if (!customAttributes.ContainsKey(prm.Key))
                     {
                         customAttributes.Add(prm);
                     }
                 }
             }
-            return base.SetParametersAsync(ParameterCollection.FromDictionary(prms));
+            return base.SetParametersAsync(ParameterCollection.FromDictionary(validPrms));
+        }
+
+        protected override void OnInit()
+        {
+            if (InitPageIndex > 1)
+            {
+                CurrentPageIndex = InitPageIndex;
+            }
         }
 
         protected override void OnParametersSet()
@@ -78,12 +89,12 @@ namespace Webdiyer.AspNetCore
                 //first page
                 if (ShowFirstLast)
                 {
-                    createPagerItem(builder, ref seq, CurrentPageIndex>1?1:0,FirstPageText,CurrentPageIndex==1?PagerItemType.Disabled: PagerItemType.Navigation);
+                    createPagerItem(builder, ref seq, CurrentPageIndex > 1?1:0,FirstPageText, CurrentPageIndex == 1?PagerItemType.Disabled: PagerItemType.Navigation);
                 }
                 //prev page
                 if (ShowPrevNext)
                 {
-                    createPagerItem(builder,ref seq,CurrentPageIndex-1,PrevPageText, CurrentPageIndex == 1 ? PagerItemType.Disabled : PagerItemType.Navigation);
+                    createPagerItem(builder,ref seq, CurrentPageIndex - 1,PrevPageText, CurrentPageIndex == 1 ? PagerItemType.Disabled : PagerItemType.Navigation);
                 }
                 //more page
                 if (ShowMorePagerItems && startPageIndex>1)
@@ -94,8 +105,8 @@ namespace Webdiyer.AspNetCore
                 {
                     for (int i = startPageIndex; i <= endPageIndex; i++)
                     {
-                        var pageIndex = i;
-                        createPagerItem(builder,ref seq, pageIndex,i.ToString(),CurrentPageIndex==i?PagerItemType.Current:PagerItemType.Number);                        
+                        var pageNum = i;
+                        createPagerItem(builder,ref seq, pageNum,pageNum.ToString(), CurrentPageIndex == pageNum?PagerItemType.Current:PagerItemType.Number);                        
                     }
                 }
                 //more page
@@ -106,12 +117,12 @@ namespace Webdiyer.AspNetCore
                 //next page
                 if (ShowPrevNext)
                 {
-                    createPagerItem(builder, ref seq, CurrentPageIndex<TotalPageCount?CurrentPageIndex + 1:0,NextPageText, CurrentPageIndex<TotalPageCount? PagerItemType.Navigation:PagerItemType.Disabled);
+                    createPagerItem(builder, ref seq, CurrentPageIndex < TotalPageCount? CurrentPageIndex + 1:0,NextPageText, CurrentPageIndex < TotalPageCount? PagerItemType.Navigation:PagerItemType.Disabled);
                 }
                 //last page
                 if (ShowFirstLast)
                 {
-                    createPagerItem(builder, ref seq, CurrentPageIndex<TotalPageCount ? TotalPageCount : 0,LastPageText, CurrentPageIndex<TotalPageCount ? PagerItemType.Navigation: PagerItemType.Disabled );
+                    createPagerItem(builder, ref seq, CurrentPageIndex < TotalPageCount ? TotalPageCount : 0,LastPageText, CurrentPageIndex < TotalPageCount ? PagerItemType.Navigation: PagerItemType.Disabled );
                 }
                 RenderBeforeEndTag?.Invoke(builder);
                 builder.CloseElement();
@@ -168,7 +179,7 @@ namespace Webdiyer.AspNetCore
             }
             builder.OpenElement(++seq, "a");
             builder.AddAttribute(++seq, "class", itemClass);
-            if (pageIndex > 0&&pageIndex!=CurrentPageIndex)
+            if (pageIndex > 0)
             {
                 builder.AddAttribute(++seq, "href", string.Format(RoutePattern, pageIndex));
                 builder.AddAttribute(++seq, "onclick", BindMethods.GetEventHandlerValue<UIMouseEventArgs>(() => ChangePage(pageIndex)));

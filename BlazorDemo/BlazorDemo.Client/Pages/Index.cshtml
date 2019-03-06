@@ -1,15 +1,16 @@
 ﻿@page "/"
 @page "/index/{page:int}"
+
 @addTagHelper *,Webdiyer.AspNetCore.BlazorPager
 
-<h1>BlazorPager with efault settings:</h1>
+<h1>BlazorPager with default settings:</h1>
 
 <BlazorPager TotalItemCount="188" OnPageChanged="@((p)=>ChangePage(p))" RoutePattern="index/{0}"></BlazorPager>
 
 @functions{
     [Parameter]
     private int Page { get; set; }
-    
+
     void ChangePage(int pageIndex)
     {
         StateHasChanged();

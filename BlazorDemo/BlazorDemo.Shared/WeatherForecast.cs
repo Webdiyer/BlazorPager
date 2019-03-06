@@ -1,6 +1,8 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace Demo.App.Services
+namespace BlazorDemo.Shared
 {
     public class WeatherForecast
     {
@@ -8,8 +10,8 @@ namespace Demo.App.Services
 
         public int TemperatureC { get; set; }
 
-        public int TemperatureF { get; set; }
-
         public string Summary { get; set; }
+
+        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
     }
 }

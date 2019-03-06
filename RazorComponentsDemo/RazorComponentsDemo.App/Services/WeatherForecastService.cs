@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using X.PagedList;
 
-namespace Demo.App.Services
+namespace RazorComponentsDemo.App.Services
 {
     public class WeatherForecastService
     {

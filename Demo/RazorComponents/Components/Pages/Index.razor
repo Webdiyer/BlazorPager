@@ -1,0 +1,15 @@
+﻿@page "/"
+@page "/index/{page:int}"
+@addTagHelper *,Webdiyer.AspNetCore.BlazorPager
+
+<h1>BlazorPager with default settings:</h1>
+<code>&lt;BlazorPager TotalItemCount="188" RoutePattern="index/{0}"&gt;&lt;/BlazorPager&gt;</code>
+
+<BlazorPager TotalItemCount="188" InitPageIndex="@Page" RoutePattern="index/{0}"></BlazorPager>
+
+
+@functions{
+    [Parameter]
+    private int Page { get; set; }
+    
+}

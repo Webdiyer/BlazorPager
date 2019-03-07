@@ -10,9 +10,9 @@ namespace Webdiyer.AspNetCore
 {
     public partial class BlazorPager : ComponentBase
     {
-        void ChangePage(int pageIndex)
+        private void ChangePage(int pageIndex)
         {
-            if (pageIndex > 0)
+            if (pageIndex > 0&&pageIndex!=CurrentPageIndex)
             {
                 CurrentPageIndex = pageIndex;
                 OnPageChanged?.Invoke(pageIndex);
@@ -175,10 +175,16 @@ namespace Webdiyer.AspNetCore
             if (hasContainerTag)
             {
                 builder.OpenElement(++seq, containerTag);
-                builder.AddAttribute(++seq, "class", containerClass);
+                if (!string.IsNullOrWhiteSpace(containerClass))
+                {
+                    builder.AddAttribute(++seq, "class", containerClass);
+                }
             }
             builder.OpenElement(++seq, "a");
-            builder.AddAttribute(++seq, "class", itemClass);
+            if (!string.IsNullOrWhiteSpace(itemClass))
+            {
+                builder.AddAttribute(++seq, "class", itemClass);
+            }
             if (pageIndex > 0)
             {
                 builder.AddAttribute(++seq, "href", string.Format(RoutePattern, pageIndex));

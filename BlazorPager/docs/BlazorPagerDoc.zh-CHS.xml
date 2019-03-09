@@ -1,0 +1,207 @@
+﻿<BlazorPagerDoc>
+    <Class name="BlazorPager">
+      <summary>
+        应用于 Blazor 和 Razor Components web应用程序中的分页组件。
+      </summary>
+    </Class>
+  <Property name="TagName">
+    <summary>
+      分页控件html容器标签名，默认为div。
+    </summary>
+  </Property>
+  <Property name="CurrentPageIndex">
+    <summary>获取当前页索引。</summary>
+  </Property>
+  <Property name="InitPageIndex">
+    <summary>
+      获取或设置分页组件初始化时的当前页索引。
+    </summary>
+  </Property>
+  <Property name="PageSize">
+    <summary>获取或设置每页显示的记录数。</summary>
+  </Property>
+  <Property name="TotalItemCount">
+    <summary>获取或设置要分页的数据总数。</summary>
+  </Property>
+  <Property name="TotalPageCount">
+    <summary>获取要分页数据的总页数。</summary>
+  </Property>
+  <Property name="NumericPagerItemCount">
+    <summary>
+      获取或设置要显示的数字页索引分页按钮的数量。
+    </summary>
+  </Property>
+  <Property name="ShowPrevNext">
+    <summary>
+      获取或设置一个值，该值指示是否显示上一页和下一页分页导航按钮。
+    </summary>
+  </Property>
+  <Property name="ShowFirstLast">
+    <summary>
+      获取或设置一个值，该值指示是否显示首页和尾页分页导航按钮。
+    </summary>
+  </Property>
+  <Property name="ShowNumericPagerItems">
+    <summary>
+      获取或设置一个值，该值指示是否显示数字页索引分页按钮。
+    </summary>
+  </Property>
+  <Property name="ShowMorePagerItems">
+    <summary>
+      获取或设置一个值，该值指示是否显示更多页分页导航按钮。
+    </summary>
+  </Property>
+  <Property name="PrevPageText">
+    <summary>
+      获取或设置上一页分页按钮上显示的文本。
+    </summary>
+  </Property>
+  <Property name="NextPageText">
+    <summary>
+      获取或设置下一页分页按钮上显示的文本。
+    </summary>
+  </Property>
+  <Property name="FirstPageText">
+    <summary>
+      获取或设置首页分页按钮上显示的文本。
+    </summary>
+  </Property>
+  <Property name="LastPageText">
+    <summary>
+      获取或设置最后一页分页按钮上显示的文本。
+    </summary>
+  </Property>
+  <Property name="MorePageText">
+    <summary>
+      获取或设置更多页按钮上显示的文本。
+    </summary>
+  </Property>
+  <Property name="AutoHide">
+    <summary>
+      获取或设置一个值，该值指示当总页数只有一页时，是否自动隐藏分页组件。
+    </summary>
+  </Property>
+  <Property name="PagerItemCssClass">
+    <summary>
+      获取或设置要应用于所有分页按钮上的CSS样式类名。
+    </summary>
+  </Property>
+  <Property name="CurrentPagerItemCssClass">
+    <summary>
+      获取或设置要应用于当前页索引分页按钮上的CSS样式类名。
+    </summary>
+  </Property>
+  <Property name="NumericPagerItemCssClass">
+    <summary>
+      获取或设置要应用于数字页索引分页按钮上的CSS样式类名。
+    </summary>
+  </Property>
+  <Property name="DisabledPagerItemCssClass">
+    <summary>
+      获取或设置应用于已禁用的分页元素的CSS样式类。
+    </summary>
+  </Property>
+  <Property name="NavigationPagerItemCssClass">
+    <summary>
+      获取或设置应用于分页导航按钮的CSS样式类。
+    </summary>
+  </Property>
+  <Property name="MorePagerItemCssClass">
+    <summary>
+      获取或设置应用于更多页分页导航按钮的CSS样式类。
+    </summary>
+  </Property>
+  <Property name="NumericPagerItemTextFormatString">
+    <summary>
+      获取或设置数字页索引文本格式化字符串。
+    </summary>
+  </Property>
+  <Property name="CurrentPagerItemTextFormatString">
+    <summary>
+      获取或设置当前页数字页索引文本格式化字符串。
+    </summary>
+  </Property>
+  <Property name="RoutePattern">
+    <summary>
+      获取或设置用于生成分页链接的路由模板，该值必须包含一个“{0}”占位符。
+    </summary>
+  </Property>
+  <Property name="OnPageChanged">
+    <summary>
+      获取或设置分页事件处理程序。
+    </summary>
+  </Property>
+  <Property name="PagerItemContainerTagName">
+    <summary>
+      获取或设置分页元素的父元素的标签名，默认值为null，意即没有父元素。
+    </summary>
+  </Property>
+  <Property name="PagerItemContainerCssClass">
+    <summary>
+      获取或设置要应用于分页元素父元素的CSS样式类。
+    </summary>
+  </Property>
+  <Property name="NumericPagerItemContainerTagName">
+    <summary>
+      获取或设置数字页索引分页元素的父元素的标签名，默认值为null，意即没有父元素。
+    </summary>
+  </Property>
+  <Property name="NumericPagerItemContainerCssClass">
+    <summary>
+      获取或设置要应用于数字页索引分页元素父元素的CSS样式类。
+    </summary>
+  </Property>
+  <Property name="CurrentPagerItemContainerTagName">
+    <summary>
+      获取或设置当前页分页元素的父元素的标签名，默认值为null，意即没有父元素。
+    </summary>
+  </Property>
+  <Property name="CurrentPagerItemContainerCssClass">
+    <summary>
+      获取或设置要应用于当前页分页元素父元素的CSS样式类。
+    </summary>
+  </Property>
+  <Property name="NavigationPagerItemContainerTagName">
+    <summary>
+      获取或设置首页、尾页、上页和下页四个分页元素的父元素的标签名，默认值为null，意即没有父元素。
+    </summary>
+  </Property>
+  <Property name="NavigationPagerItemContainerCssClass">
+    <summary>
+      获取或设置要应用于首页、尾页、上页和下页四个分页元素父元素的CSS样式类。
+    </summary>
+  </Property>
+  <Property name="MorePagerItemContainerTagName">
+    <summary>
+      获取或设置更多页分页元素的父元素的标签名，默认值为null，意即没有父元素。
+    </summary>
+  </Property>
+  <Property name="MorePagerItemContainerCssClass">
+    <summary>
+      获取或设置要应用于更多页分页元素父元素的CSS样式类。
+    </summary>
+  </Property>
+  <Property name="DisabledPagerItemContainerTagName">
+    <summary>
+      获取或设置被禁用的分页元素的父元素的标签名，默认值为null，意即没有父元素。
+    </summary>
+    <remarks>
+      若当前页为第一页时，则首页和上一页分页导航按钮将被禁用；若当前页为最后一页，则尾页和下一页分页导航按钮将被禁用；
+    </remarks>
+  </Property>
+  <Property name="DisabledPagerItemContainerCssClass">
+    <summary>
+      获取或设置要应用于被禁用的分页元素父元素的CSS样式类。
+    </summary>
+  </Property>
+  <Property name="RenderAfterBeginTag">
+    <summary>
+      获取或设置一个用于在分页组件开始标签后写入内容的委托。
+    </summary>
+  </Property>
+  <Property name="RenderBeforeEndTag">
+    <summary>
+      获取或设置一个用于在分页组件结束标签前写入内容的委托。
+    </summary>
+  </Property>
+</BlazorPagerDoc>

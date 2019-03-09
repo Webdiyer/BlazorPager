@@ -1,0 +1,207 @@
+﻿<BlazorPagerDoc>
+    <Class name="BlazorPager">
+      <summary>
+        Pagination component for Blazor and Razor Components application.
+      </summary>
+    </Class>
+  <Property name="TagName">
+    <summary>
+      Gets or sets the HTML tag name for the container element of the pager, default value is div.
+    </summary>
+  </Property>
+  <Property name="CurrentPageIndex">
+    <summary>Gets the current page index.</summary>
+  </Property>
+  <Property name="InitPageIndex">
+    <summary>
+      Gets or sets the current page index value when the pager component initialized first time.
+    </summary>
+  </Property>
+  <Property name="PageSize">
+    <summary>Gets or sets the number of data items that are displayed for each page of data.</summary>
+  </Property>
+  <Property name="TotalItemCount">
+    <summary>Gets or sets the total number of data items that are available for paging.</summary>
+  </Property>
+  <Property name="TotalPageCount">
+    <summary>Gets the total number of pages that are available for paging.</summary>
+  </Property>
+  <Property name="NumericPagerItemCount">
+    <summary>
+      Gets or sets the maximum number of the numeric pager items to be displayed.
+    </summary>
+  </Property>
+  <Property name="ShowPrevNext">
+    <summary>
+      Gets or sets a value indicating whether the previous page and the next page pager items should be displayed.
+    </summary>
+  </Property>
+  <Property name="ShowFirstLast">
+    <summary>
+      Gets or sets a value indicating whether the first page and the last page pager items should be displayed.
+    </summary>
+  </Property>
+  <Property name="ShowNumericPagerItems">
+    <summary>
+      Gets or sets a value indicating whether the numeric pager items should be displayed.
+    </summary>
+  </Property>
+  <Property name="ShowMorePagerItems">
+    <summary>
+      Gets or sets a value indicating whether the more pager items should be displayed.
+    </summary>
+  </Property>
+  <Property name="PrevPageText">
+    <summary>
+      Gets or sets the text displayed for the previous page pager item.
+    </summary>
+  </Property>
+  <Property name="NextPageText">
+    <summary>
+      Gets or sets the text displayed for the next page pager item.
+    </summary>
+  </Property>
+  <Property name="FirstPageText">
+    <summary>
+      Gets or sets the text displayed for the first page button.
+    </summary>
+  </Property>
+  <Property name="LastPageText">
+    <summary>
+      Gets or sets the text displayed for the last page pager item.
+    </summary>
+  </Property>
+  <Property name="MorePageText">
+    <summary>
+      Gets or sets the text displayed for the more pager items.
+    </summary>
+  </Property>
+  <Property name="AutoHide">
+    <summary>
+      Gets or sets a value indicating whether MvcPager should be hidden if there's only one page of data.
+    </summary>
+  </Property>
+  <Property name="PagerItemCssClass">
+    <summary>
+      Gets or sets the css class to be applied to every pager items.
+    </summary>
+  </Property>
+  <Property name="CurrentPagerItemCssClass">
+    <summary>
+      Gets or sets the css class to be applied to the current page pager item.
+    </summary>
+  </Property>
+  <Property name="NumericPagerItemCssClass">
+    <summary>
+      Gets or sets the css class to be applied to the numeric pager items.
+    </summary>
+  </Property>
+  <Property name="DisabledPagerItemCssClass">
+    <summary>
+      Gets or sets the css class to be applied to the disabled navigation pager items.
+    </summary>
+  </Property>
+  <Property name="NavigationPagerItemCssClass">
+    <summary>
+      Gets or sets the css class to be applied to the first, previous, next and last page pager items.
+    </summary>
+  </Property>
+  <Property name="MorePagerItemCssClass">
+    <summary>
+      Gets or sets the css class to be applied to the more pager items.
+    </summary>
+  </Property>
+  <Property name="NumericPagerItemTextFormatString">
+    <summary>
+      Gets or sets the format string for all numeric pager items.
+    </summary>
+  </Property>
+  <Property name="CurrentPagerItemTextFormatString">
+    <summary>
+      Gets or sets the format string for the current page number.
+    </summary>
+  </Property>
+  <Property name="RoutePattern">
+    <summary>
+      Gets or sets the route template that the pager component used to generate pagination links, it must contains a "{0}" placeholder.
+    </summary>
+  </Property>
+  <Property name="OnPageChanged">
+    <summary>
+      Gets or sets an action that been invoked when page index changed.
+    </summary>
+  </Property>
+  <Property name="PagerItemContainerTagName">
+    <summary>
+      Gets or sets the tag name of the container element that wraps every pager items, default value is null.
+    </summary>
+  </Property>
+  <Property name="PagerItemContainerCssClass">
+    <summary>
+      Gets or sets the css class to be applied to the container element of pager items.
+    </summary>
+  </Property>
+  <Property name="NumericPagerItemContainerTagName">
+    <summary>
+      Gets or sets the tag name of the container element that wraps every numeric pager items, default value is null.
+    </summary>
+  </Property>
+  <Property name="NumericPagerItemContainerCssClass">
+    <summary>
+      Gets or sets the  css class to be applied to the container element of numeric pager items.
+    </summary>
+  </Property>
+  <Property name="CurrentPagerItemContainerTagName">
+    <summary>
+      Gets or sets the tag name of the container element that wraps current pager item, default value is null.
+    </summary>
+  </Property>
+  <Property name="CurrentPagerItemContainerCssClass">
+    <summary>
+      Gets or sets the  css class to be applied to the container element of the current pager item.
+    </summary>
+  </Property>
+  <Property name="NavigationPagerItemContainerTagName">
+    <summary>
+      Gets or sets the tag name of the container element that wraps first,last,next and previous pager items, default value is null.
+    </summary>
+  </Property>  
+  <Property name="NavigationPagerItemContainerCssClass">
+    <summary>
+      Gets or sets the  css class to be applied to the container element of first,last,next and previous pager items.
+    </summary>
+  </Property>
+  <Property name="MorePagerItemContainerTagName">
+    <summary>
+      Gets or sets the tag name of the container element that wraps more pager items, default value is null.
+    </summary>
+  </Property>
+  <Property name="MorePagerItemContainerCssClass">
+    <summary>
+      Gets or sets the  css class to be applied to the container element of more pager items.
+    </summary>
+  </Property>
+  <Property name="DisabledPagerItemContainerTagName">
+    <summary>
+      Gets or sets the tag name of the container element that wraps disabled pager items, default value is null.
+    </summary>
+    <remarks>
+      When the current page index is 1, the first and the previous navigation pager items will be disabled; When the current page index is the last page index, then the next and the last navigation pager items will be disabled;
+    </remarks>
+  </Property>
+  <Property name="DisabledPagerItemContainerCssClass">
+    <summary>
+      Gets or sets the  css class to be applied to the container element of the disabled pager item.
+    </summary>
+  </Property>
+  <Property name="RenderAfterBeginTag">
+    <summary>
+      Gets or sets the delegate that render the content after the begin tag of the pager component.
+    </summary>
+  </Property>
+  <Property name="RenderBeforeEndTag">
+    <summary>
+      Gets or sets the delegate that render the content before the end tag of the pager component.
+    </summary>
+  </Property>
+</BlazorPagerDoc>

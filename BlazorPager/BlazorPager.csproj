@@ -17,6 +17,10 @@
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>E:\GitHub\BlazorPager\BlazorPager\Webdiyer.AspNetCore.BlazorPager.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="LinqExtensions.cs" />
     <Compile Remove="PagedList.cs" />

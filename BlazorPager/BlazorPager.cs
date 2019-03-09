@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components.RenderTree;
 
 namespace Webdiyer.AspNetCore
 {
+    ///<include file='docs/BlazorPagerDoc.xml' path='BlazorPagerDoc/Class[@name="BlazorPager"]/*'/>
     public partial class BlazorPager : ComponentBase
     {
         private void ChangePage(int pageIndex)

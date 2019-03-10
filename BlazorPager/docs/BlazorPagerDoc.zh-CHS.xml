@@ -204,4 +204,32 @@
       获取或设置一个用于在分页组件结束标签前写入内容的委托。
     </summary>
   </Property>
+  <Method name="GoToPage">
+    <summary>
+      跳转到指定页。
+    </summary>
+    <param name="pageIndex">要跳转到的页索引，从1开始。</param>
+  </Method>
+  <Method name="OnInit">
+    <summary>
+      重写 ComponentBase.OnInit 方法。
+    </summary>
+  </Method>
+  <Method name="OnParametersSet">
+    <summary>
+      重写 ComponentBase.OnParametersSet 方法。
+    </summary>
+  </Method>
+  <Method name="BuildRenderTree">
+    <summary>
+      重写 ComponentBase.BuildRenderTree 方法，执行组件呈现逻辑。
+    </summary>
+    <param name="builder">一个接收呈现输出的 RenderTreeBuilder 对象。</param>
+  </Method>
+  <Method name="SetParametersAsync">
+    <summary>
+      重写 ComponentBase.SetParametersAsync 方法。
+    </summary>
+    <param name="parameters">要应用的参数集合。</param>
+  </Method>
 </BlazorPagerDoc>

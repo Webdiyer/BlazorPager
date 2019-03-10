@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>E:\GitHub\BlazorPager\BlazorPager\Webdiyer.AspNetCore.BlazorPager.xml</DocumentationFile>
+    <DocumentationFile>E:\GitHub\BlazorPager\BlazorPager\docs\Webdiyer.AspNetCore.BlazorPager.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

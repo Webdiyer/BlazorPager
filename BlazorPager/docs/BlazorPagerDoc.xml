@@ -123,7 +123,7 @@
   </Property>
   <Property name="RoutePattern">
     <summary>
-      Gets or sets the route template that the pager component used to generate pagination links, it must contains a "{0}" placeholder.
+      Gets or sets the route template that the pager component used to generate pagination links, it must contains a placeholder "{0}" for page index.
     </summary>
   </Property>
   <Property name="OnPageChanged">
@@ -204,4 +204,32 @@
       Gets or sets the delegate that render the content before the end tag of the pager component.
     </summary>
   </Property>
+  <Method name="GoToPage">
+    <summary>
+      Go to the specified page index.
+    </summary>
+    <param name="pageIndex">1-based number of the page to go to.</param>
+  </Method>
+  <Method name="OnInit">
+    <summary>
+      Override the ComponentBase.OnInit method.
+    </summary>
+  </Method>
+  <Method name="OnParametersSet">
+    <summary>
+      Override the ComponentBase.OnParametersSet method.
+    </summary>
+  </Method>
+  <Method name="BuildRenderTree">
+    <summary>
+      Override the ComponentBase.BuildRenderTree method.
+    </summary>
+    <param name="builder">A RenderTreeBuilder that will receive the render output.</param>
+  </Method>
+  <Method name="SetParametersAsync">
+    <summary>
+      Override the ComponentBase.SetParametersAsync method.
+    </summary>
+    <param name="parameters">The parameters to apply.</param>
+  </Method>
 </BlazorPagerDoc>

@@ -23,6 +23,7 @@ namespace Webdiyer.AspNetCore
 
         IDictionary<string, object> customAttributes=new Dictionary<string,object>();
 
+        ///<include file='docs/BlazorPagerDoc.xml' path='BlazorPagerDoc/Method[@name="SetParametersAsync"]/*'/>
         public override Task SetParametersAsync(ParameterCollection parameters)
         {
             var props = this.GetType().GetProperties(BindingFlags.NonPublic|BindingFlags.Instance|BindingFlags.Public).Where(p => p.GetCustomAttributes(false).Any(a => a is ParameterAttribute)).Select(p=>p.Name).ToArray();
@@ -47,6 +48,8 @@ namespace Webdiyer.AspNetCore
             return base.SetParametersAsync(ParameterCollection.FromDictionary(validPrms));
         }
 
+
+        ///<include file='docs/BlazorPagerDoc.xml' path='BlazorPagerDoc/Method[@name="OnInit"]/*'/>
         protected override void OnInit()
         {
             if (InitPageIndex > 1)
@@ -55,6 +58,7 @@ namespace Webdiyer.AspNetCore
             }
         }
 
+        ///<include file='docs/BlazorPagerDoc.xml' path='BlazorPagerDoc/Method[@name="OnParametersSet"]/*'/>
         protected override void OnParametersSet()
         {
             TotalPageCount = (int)Math.Ceiling(TotalItemCount / (double)PageSize);
@@ -72,6 +76,7 @@ namespace Webdiyer.AspNetCore
         }
 
 
+        ///<include file='docs/BlazorPagerDoc.xml' path='BlazorPagerDoc/Method[@name="BuildRenderTree"]/*'/>
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
             base.BuildRenderTree(builder);
@@ -130,6 +135,7 @@ namespace Webdiyer.AspNetCore
             }
         }
 
+        ///<include file='docs/BlazorPagerDoc.xml' path='BlazorPagerDoc/Method[@name="GoToPage"]/*'/>
         public void GoToPage(int pageIndex)
         {
             if (pageIndex > 0 && pageIndex != CurrentPageIndex)

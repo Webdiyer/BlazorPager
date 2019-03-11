@@ -1,0 +1,128 @@
+﻿@page "/search"
+@page "/search/{page:int}"
+@using BlazorHosted.Shared;
+@inject HttpClient Http
+@using X.PagedList;
+@using Webdiyer.AspNetCore;
+@using Microsoft.AspNetCore.Components.RenderTree;
+@addTagHelper *,Webdiyer.AspNetCore.BlazorPager
+
+<h1 class="pb-2 mt-4 mb-2 border-bottom">BlazorPager demo: search and pagination</h1>
+<div class="row">
+    <input type="text" class="form-control col-6" placeholder="Enter company name to search" bind="@CompanyName" />
+    <button type="button" class="btn btn-primary col-1" onclick="@SearchOrders">Search</button>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>OrderId</th>
+            <th>OrderDate</th>
+            <th>CustomerId</th>
+            <th>CompanyName</th>
+            <th>EmployeeName</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var o in Orders)
+        {
+            <tr>
+                <td>@o.OrderID</td>
+                <td>@o.OrderDate.ToShortDateString()</td>
+                <td>@o.CustomerID</td>
+                <td>@o.CompanyName</td>
+                <td>@o.EmployeeName</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<nav aria-label="Page navigation">
+    <div class="container">
+        <div class="row justify-content-center">
+            <BlazorPager ref="blazorPager"
+                         RenderAfterBeginTag="@RenderPagerInfo"
+                         TotalItemCount="@Orders.TotalItemCount"
+                         OnPageChanged="@ChangePage"
+                         PageSize="@PageSize"
+                         InitPageIndex="@Page"
+                         TagName="ul"
+                         AutoHide="false"
+                         class="pagination pagination-sm col-7"
+                         PagerItemContainerTagName="li"
+                         PagerItemContainerCssClass="page-item"
+                         CurrentPagerItemContainerCssClass="page-item active"
+                         DisabledPagerItemContainerCssClass="page-item disabled"
+                         CurrentPagerItemTextFormatString="{0}<span class='sr-only'>current</span>"
+                         PagerItemCssClass="page-link"
+                         RoutePattern="search/{0}"></BlazorPager>
+            <div class="col-2">
+                <select class="form-control form-control-sm" bind="@SelectedPage">
+                    @for (var i = 1; i <= Orders.PageCount; i++)
+                    {
+                        <option value="@i">Page @i</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+</nav>
+
+
+@functions{
+    [Parameter]
+    private int Page { get; set; } = 1;
+
+    BlazorPager blazorPager;
+
+    //company name to bind
+    string CompanyName { get; set; }
+    //company name to search
+    string _compName = null;
+
+    string SelectedPage
+    {
+        get => Page.ToString();
+        set { blazorPager.GoToPage(int.Parse(value)); }
+    }
+    int PageSize = 5;
+
+    IPagedList<Order> Orders { get; set; }
+
+    protected override async Task OnInitAsync()
+    {
+        await GetOrders(Page, PageSize);
+    }
+
+    void RenderPagerInfo(RenderTreeBuilder builder)
+    {
+        var seq = 0;
+        builder.OpenElement(seq, "li");
+        builder.AddAttribute(++seq, "class", "page-item disabled mr-3");
+        builder.OpenElement(++seq, "a");
+        builder.AddAttribute(++seq, "class", "page-link");
+        builder.AddAttribute(++seq, "tabindex", "-1");
+        builder.AddContent(++seq, "Page:" + blazorPager.CurrentPageIndex + "/" + blazorPager.TotalPageCount);
+        builder.CloseElement();
+        builder.CloseElement();
+    }
+
+    async void ChangePage(int pageIndex)
+    {
+        await GetOrders(pageIndex, PageSize);
+        SelectedPage = pageIndex.ToString();
+        StateHasChanged();
+    }
+
+    async Task GetOrders(int pageIndex, int pageSize)
+    {
+        var data = await Http.GetJsonAsync<PagedListData<Order>>($"api/SampleData/Orders?companyName={_compName}&pageIndex={pageIndex}&pagesize={PageSize}");
+        Orders = new StaticPagedList<Order>(data.Items, pageIndex, data.MetaData.PageSize, data.MetaData.TotalItemCount);        
+    }
+
+    async void SearchOrders(UIMouseEventArgs e)
+    {
+        _compName = CompanyName;
+        await GetOrders(1, PageSize);
+        blazorPager.GoToPage(1);
+    }
+
+}

@@ -1,15 +1,15 @@
-﻿@page "/fetchdata"
-@page "/fetchdata/{page:int}"
+﻿@page "/inputbox"
+@page "/inputbox/{page:int}"
 @using BlazorHosted.Shared;
 @inject HttpClient Http
 @using X.PagedList;
 @using Webdiyer.AspNetCore;
 @using Microsoft.AspNetCore.Components.RenderTree;
+
 @addTagHelper *,Webdiyer.AspNetCore.BlazorPager
 
-<h1>Weather forecast</h1>
+<h1 class="pb-2 mt-4 mb-2 border-bottom">BlazorPager demo: using input box</h1>
 
-<p>This component demonstrates fetching data from the server.</p>
 
 @if (forecasts == null)
 {
@@ -38,18 +38,17 @@ else
             }
         </tbody>
     </table>
-
     <nav aria-label="Page navigation">
         <div class="container">
-            <div class="row">
+            <div class="row justify-content-center">
                 <BlazorPager ref="blazorPager"
-                             RenderAfterBeginTag=@RenderPagerInfo
+                             RenderAfterBeginTag="@RenderPagerInfo"
                              TotalItemCount="@TotalItemCount"
                              OnPageChanged="@ChangePage"
-                             InitPageIndex="@Page"
                              PageSize="@PageSize"
+                             InitPageIndex="@Page"
                              TagName="ul"
-                             class="pagination pagination-sm col-8 justify-content-end"
+                             class="pagination pagination-sm col-6"
                              PagerItemContainerTagName="li"
                              PagerItemContainerCssClass="page-item"
                              CurrentPagerItemContainerCssClass="page-item active"
@@ -57,18 +56,11 @@ else
                              CurrentPagerItemTextFormatString="{0}<span class='sr-only'>current</span>"
                              PagerItemCssClass="page-link"
                              RoutePattern="@RoutePattern"></BlazorPager>
-                <div class="col-4">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-success btn-sm">Go to page:</button>
-                        <button type="button" class="btn btn-success btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <div class="dropdown-menu">
-                            @for (var i = 1; i <= forecasts.PageCount; i++)
-                            {
-                                var index = i;
-                                <a class="dropdown-item@(index==Page?" active":"")" href="@(string.Format(RoutePattern,i))" onclick="@(() => GoToPage(index))">@index</a>
-                            }
+                <div class="col-2">
+                    <div class="input-group input-group-sm mb-3 pr-3">
+                        <input type="number" class="form-control" placeholder="Enter page index" bind="@inputPageIndex" aria-label="Page index" aria-describedby="basic-addon2" />
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="@GoToPage">Go</button>
                         </div>
                     </div>
                 </div>
@@ -78,12 +70,11 @@ else
 }
 
 @functions {
+    IPagedList<WeatherForecast> forecasts;
 
-        IPagedList<WeatherForecast> forecasts;
+    BlazorPager blazorPager;
 
-        BlazorPager blazorPager;
-
-        string RoutePattern => "fetchdata/{0}";
+    string RoutePattern => "inputbox/{0}";
 
     [Parameter]
     int Page { get; set; } = 1;
@@ -92,11 +83,7 @@ else
 
     int PageSize { get; set; } = 5;
 
-
-    protected override async Task OnInitAsync()
-    {
-        await GetForecastsData(Page);
-    }
+    int inputPageIndex { get; set; }
 
     async Task GetForecastsData(int pageIndex)
     {
@@ -104,6 +91,13 @@ else
         forecasts = new StaticPagedList<WeatherForecast>(data.Items,pageIndex,data.MetaData.PageSize,data.MetaData.TotalItemCount);
         TotalItemCount = forecasts.TotalItemCount;
     }
+
+    protected override async Task OnInitAsync()
+    {
+        await GetForecastsData(Page);
+        inputPageIndex = Page;
+    }
+
 
     void RenderPagerInfo(RenderTreeBuilder builder)
     {
@@ -113,7 +107,7 @@ else
         builder.OpenElement(++seq, "a");
         builder.AddAttribute(++seq, "class", "page-link");
         builder.AddAttribute(++seq, "tabindex", "-1");
-        builder.AddContent(++seq, "Page:"+blazorPager.CurrentPageIndex + "/" + blazorPager.TotalPageCount);
+        builder.AddContent(++seq, "Page:" + blazorPager.CurrentPageIndex + "/" + blazorPager.TotalPageCount);
         builder.CloseElement();
         builder.CloseElement();
     }
@@ -123,9 +117,10 @@ else
         await GetForecastsData(pageIndex);
         StateHasChanged();
     }
-    
-     void GoToPage(int pageIndex)
+
+    void GoToPage()
     {
-        blazorPager.GoToPage(pageIndex);
+        blazorPager.GoToPage(inputPageIndex);
     }
+
 }

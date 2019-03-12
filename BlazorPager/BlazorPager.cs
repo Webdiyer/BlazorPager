@@ -138,7 +138,7 @@ namespace Webdiyer.AspNetCore
         ///<include file='docs/BlazorPagerDoc.xml' path='BlazorPagerDoc/Method[@name="GoToPage"]/*'/>
         public void GoToPage(int pageIndex)
         {
-            if (pageIndex > 0 && pageIndex != CurrentPageIndex)
+            if (pageIndex > 0)
             {
                 UriHelper.NavigateTo(string.Format(RoutePattern, pageIndex));
                 ChangePage(pageIndex);

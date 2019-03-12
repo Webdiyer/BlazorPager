@@ -1,82 +1,86 @@
 ﻿@page "/dynamicpagesize"
 @page "/dynamicpagesize/{page:int}"
-@using BlazorHosted.Shared;
 @inject HttpClient Http
 @using X.PagedList;
+@using BlazorHosted.Shared;
 @using Webdiyer.AspNetCore;
 @using Microsoft.AspNetCore.Components.RenderTree;
 @addTagHelper *,Webdiyer.AspNetCore.BlazorPager
 
 <h1 class="pb-2 mt-4 mb-2 border-bottom">BlazorPager demo: Dynamic Page size</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>OrderId</th>
-            <th>OrderDate</th>
-            <th>CustomerId</th>
-            <th>CompanyName</th>
-            <th>EmployeeName</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var o in Orders)
-        {
+@if (forecasts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td>@o.OrderID</td>
-                <td>@o.OrderDate.ToShortDateString()</td>
-                <td>@o.CustomerID</td>
-                <td>@o.CompanyName</td>
-                <td>@o.EmployeeName</td>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
             </tr>
-        }
-    </tbody>
-</table>
-<nav aria-label="Page navigation">
-    <div class="container">
-        <div class="row justify-content-center">
-            <BlazorPager ref="blazorPager"
-                         RenderAfterBeginTag="@RenderPagerInfo"
-                         TotalItemCount="@Orders.TotalItemCount"
-                         OnPageChanged="@ChangePage"
-                         PageSize="@PageSize"
-                         InitPageIndex="@Page"
-                         TagName="ul"
-                         class="pagination pagination-sm col-7"
-                         PagerItemContainerTagName="li"
-                         PagerItemContainerCssClass="page-item"
-                         CurrentPagerItemContainerCssClass="page-item active"
-                         DisabledPagerItemContainerCssClass="page-item disabled"
-                         CurrentPagerItemTextFormatString="{0}<span class='sr-only'>current</span>"
-                         PagerItemCssClass="page-link"
-                         RoutePattern="dynamicpagesize/{0}"></BlazorPager>
-            <div class="col-2">
-                <select class="form-control form-control-sm" bind="@SelectedPage">
-                    @for (var i = 1; i <= Orders.PageCount; i++)
-                    {
-                        <option value="@i">Page @i</option>
-                    }
-                </select>
-            </div>
-            <div class="col-2">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-success btn-sm">PageSize:@PageSize</button>
-                    <button type="button" class="btn btn-success btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        @for (int i = 5; i <= 20; i += 5)
+        </thead>
+        <tbody>
+            @foreach (var forecast in forecasts)
+            {
+                <tr>
+                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.TemperatureC</td>
+                    <td>@forecast.TemperatureF</td>
+                    <td>@forecast.Summary</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation">
+        <div class="container">
+            <div class="row justify-content-center">
+                <BlazorPager ref="blazorPager"
+                             RenderAfterBeginTag="@RenderPagerInfo"
+                             TotalItemCount="@forecasts.TotalItemCount"
+                             OnPageChanged="@ChangePage"
+                             PageSize="@PageSize"
+                             InitPageIndex="@Page"
+                             TagName="ul"
+                             class="pagination pagination-sm col-7"
+                             PagerItemContainerTagName="li"
+                             PagerItemContainerCssClass="page-item"
+                             CurrentPagerItemContainerCssClass="page-item active"
+                             DisabledPagerItemContainerCssClass="page-item disabled"
+                             CurrentPagerItemTextFormatString="{0}<span class='sr-only'>current</span>"
+                             PagerItemCssClass="page-link"
+                             RoutePattern="dynamicpagesize/{0}"></BlazorPager>
+                <div class="col-2">
+                    <select class="form-control form-control-sm" bind="@SelectedPage">
+                        @for (var i = 1; i <= forecasts.PageCount; i++)
                         {
-                            var size = i;
-                            <button class="@(size==PageSize?"active ":"")dropdown-item" type="button" onclick="@(()=>ChangePageSize(size))">@size</button>
+                            <option value="@i">Page @i</option>
                         }
+                    </select>
+                </div>
+                <div class="col-2">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success btn-sm">PageSize:@PageSize</button>
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            @for (int i = 5; i <= 20; i += 5)
+                            {
+                                var size = i;
+                                <button class="@(size == PageSize ? "active " : "")dropdown-item" type="button" onclick="@(() => ChangePageSize(size))">@size</button>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</nav>
-
+    </nav>
+}
 
 @functions{
     [Parameter]
@@ -91,19 +95,33 @@
     }
     int PageSize = 5;
 
+    IPagedList<WeatherForecast> forecasts;
 
     async void ChangePageSize(int pageSize)
     {
         PageSize = pageSize;
-        await GetOrders(Page, pageSize);
+        await GetForecastsData(Page, pageSize);
+        StateHasChanged();
     }
 
-    IPagedList<Order> Orders { get; set; }
+    async Task GetForecastsData(int pageIndex, int pageSize)
+    {
+        var data = await Http.GetJsonAsync<PagedListData<WeatherForecast>>($"api/SampleData/WeatherForecasts?pageIndex={pageIndex}&pagesize={PageSize}");
+        if (data.MetaData.PageCount < pageIndex)
+        {
+            blazorPager.GoToPage(data.MetaData.PageCount);
+        }
+        else
+        {
+            forecasts = new StaticPagedList<WeatherForecast>(data.Items, pageIndex, data.MetaData.PageSize, data.MetaData.TotalItemCount);
+        }
+    }
 
     protected override async Task OnInitAsync()
     {
-        await GetOrders(Page, PageSize);
+        await GetForecastsData(Page, PageSize);
     }
+
 
     void RenderPagerInfo(RenderTreeBuilder builder)
     {
@@ -120,16 +138,7 @@
 
     async void ChangePage(int pageIndex)
     {
-        await GetOrders(pageIndex, PageSize);
-        SelectedPage = pageIndex.ToString();
+        await GetForecastsData(pageIndex, PageSize);
         StateHasChanged();
     }
-
-    async Task GetOrders(int pageIndex, int pageSize)
-    {
-        var data = await Http.GetJsonAsync<PagedListData<Order>>($"api/SampleData/Orders?pageIndex={pageIndex}&pagesize={PageSize}");
-        Orders = new StaticPagedList<Order>(data.Items, pageIndex, data.MetaData.PageSize, data.MetaData.TotalItemCount);
-
-    }
-
 }

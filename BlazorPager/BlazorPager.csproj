@@ -13,8 +13,12 @@
     <PackageTags>BlazorPager;Pagination;paging</PackageTags>
     <Version>0.1.0.0</Version>
     <Copyright>Copyright © 2019 Webdiyer</Copyright>
-    <PackageReleaseNotes>Initial release, support Blazor 0.8;</PackageReleaseNotes>
+    <PackageReleaseNotes>Initial release, support Blazor 0.9!</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageId>BlazorPager</PackageId>
+    <RepositoryUrl>https://github.com/Webdiyer/BlazorPager</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

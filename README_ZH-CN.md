@@ -1,8 +1,67 @@
-﻿# BlazorPager
-[English](README.md)
+﻿# BlazorPager  | [English](README.md)
 
 BlazorPager 是一个应用于 Razor Components（即Blazor服务器端） 项目的分页组件，支持Blazor 0.8.0+，目前还在逐步完善中！
+
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/Webdiyer/BlazorPager/blob/master/LICENSE)
+[![NuGet](https://img.shields.io/nuget/v/BlazorPager.svg)](https://www.nuget.org/packages/BlazorPager/)
+
 <img src="/Demo/RazorComponents/wwwroot/images/blazorpager.gif" alt="blazorpager demo"/>
+---
+
+
+## 开发运行先决条件 ##
+
+1. [Visual Studio 2019 RC](https://visualstudio.microsoft.com/)
+2. [.Net Core 3.0 SDK preview 3](https://dotnet.microsoft.com/download/dotnet-core/3.0)
+
+## Nuget包 ##
+
+Nuget包可从 https://www.nuget.org/packages/BlazorPager/ 下载。
+
+## 安装 ##
+
+可以通过VS的Nuget包管理器界面中搜索并添加 BlazorPager 引用，也可以在VS的Nuget包管理器控制台中输入如下命令安装：
+
+```
+Install-Package BlazorPager
+```
+
+或者通过.net core命令行安装：
+```
+dotnet add package BlazorPager
+```
+
+## 使用 ##
+
+1. 注册 TagHelper：
+
+```
+@addTagHelper *,Webdiyer.AspNetCore.BlazorPager
+```
+
+2. 如果需要在服务器端代码中引用 BlazorPager，请引入如下命名空间：
+
+```
+@using Webdiyer.AspNetCore;
+```
+
+3. 一个最简单的 BlazorPager 使用示例（不获取和显示数据）：
+
+
+```
+@page "/"
+@page "/index/{page:int}"
+@addTagHelper *,Webdiyer.AspNetCore.BlazorPager
+
+<BlazorPager TotalItemCount="188" InitPageIndex="@Page" RoutePattern="index/{0}"></BlazorPager>
+
+@functions{
+    [Parameter]
+    private int Page { get; set; }
+    
+}
+```
+
 ---
 
 ## 属性： ##

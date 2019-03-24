@@ -1,10 +1,66 @@
-# BlazorPager
-[简体中文](README_ZH-CN.md)
+# BlazorPager | [简体中文](README_ZH-CN.md)
 
 BlazorPager is a Pagination component for Blazor and Razor Components application, it supports Blazor version 0.8.0+ and still under active development.
+
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/Webdiyer/BlazorPager/blob/master/LICENSE)
+[![NuGet](https://img.shields.io/nuget/v/BlazorPager.svg)](https://www.nuget.org/packages/BlazorPager/)
+
+
 <img src="/Demo/RazorComponents/wwwroot/images/blazorpager.gif" alt="blazorpager demo"/>
 
 ---
+## Prerequisites: ##
+
+1. [Visual Studio 2019 RC](https://visualstudio.microsoft.com/)
+2. [.Net Core 3.0 SDK preview 3](https://dotnet.microsoft.com/download/dotnet-core/3.0)
+
+## Nuget Package: ##
+Nuget packages can be found at: https://www.nuget.org/packages/BlazorPager/
+
+## Installation: ##
+
+Install via Visual Studio Package manager console:
+
+```
+Install-Package BlazorPager
+```
+or via .NET Core command-line interface (CLI) tools:
+```
+dotnet add package BlazorPager
+```
+## Usage ##
+
+1. Register tag helper:
+
+```
+@addTagHelper *,Webdiyer.AspNetCore.BlazorPager
+```
+
+2. Add namespace If you need to reference BlazorPager in your server side code:
+
+```
+@using Webdiyer.AspNetCore;
+```
+
+3. A simple BlazorPager pagination sample without displaying any data actually:
+
+
+```
+@page "/"
+@page "/index/{page:int}"
+@addTagHelper *,Webdiyer.AspNetCore.BlazorPager
+
+<BlazorPager TotalItemCount="188" InitPageIndex="@Page" RoutePattern="index/{0}"></BlazorPager>
+
+@functions{
+    [Parameter]
+    private int Page { get; set; }
+    
+}
+```
+
+---
+
 ## Properties: ##
 
 ---

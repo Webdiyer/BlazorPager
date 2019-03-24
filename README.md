@@ -59,6 +59,8 @@ dotnet add package BlazorPager
 }
 ```
 
+For more advanced usages, please view the sample projects under the Demo folder.
+
 ---
 
 ## Properties: ##

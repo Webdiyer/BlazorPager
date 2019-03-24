@@ -6,6 +6,7 @@ BlazorPager 是一个应用于 Razor Components（即Blazor服务器端） 项�
 [![NuGet](https://img.shields.io/nuget/v/BlazorPager.svg)](https://www.nuget.org/packages/BlazorPager/)
 
 <img src="/Demo/RazorComponents/wwwroot/images/blazorpager.gif" alt="blazorpager demo"/>
+
 ---
 
 
@@ -61,6 +62,8 @@ dotnet add package BlazorPager
     
 }
 ```
+
+更多使用示例，请查看Demo文件夹下的示例项目。
 
 ---
 
